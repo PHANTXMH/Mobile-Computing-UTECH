@@ -29,12 +29,9 @@ namespace wpclass
 
         void refreshModules()
         {
-            //DataTable dbStudents = dbAccess.getAllStudentsByModule(int.Parse(DropDownList_modules.SelectedValue));
-            //DataTable dbStudentsAll = dbAccess.getAllStudentsByModule(int.Parse(DropDownList_modules.SelectedValue));
+            
             DropDownList_modules.DataSource = dbAccess.getModules(int.Parse(DropDownList_students.SelectedValue));
-            DropDownList_modules.DataBind();
-            //DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(int.Parse(DropDownList_modules.SelectedValue));
-            //DropDownList_students_doing_module.DataBind();
+            DropDownList_modules.DataBind();            
             showModuleInfo();
             Label_selected_student.Text = DropDownList_students.SelectedItem.ToString();
         }
@@ -50,24 +47,31 @@ namespace wpclass
                 Label_lecturer.Text =
                 Label_lecturer_email.Text = string.Empty;
 
+            DropDownList_students_doing_module.Items.Clear();
+
             if (DropDownList_modules.Items.Count == 0) return;
-           
+
+            populateStudentsDoingSelectedModule();
+
             DataTable db = dbAccess.getModule(int.Parse(DropDownList_modules.SelectedValue));
             
             if (db.Rows.Count == 0) return;
             Label_lecturer.Text = db.Rows[0]["lecturer"].ToString();
             Label_lecturer_email.Text = db.Rows[0]["email"].ToString();
             Label_faculty_college_owner.Text = db.Rows[0]["fc name"].ToString();
+
+            
+        }
+
+        void populateStudentsDoingSelectedModule()
+        {            
+            DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(int.Parse(DropDownList_modules.SelectedValue));
+            DropDownList_students_doing_module.DataBind();
         }
 
         protected void DropDownList_modules_SelectedIndexChanged(object sender, EventArgs e)
         {
             showModuleInfo();
-        }
-
-        protected void DropDownList_students_doing_module_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        }        
     }
 }

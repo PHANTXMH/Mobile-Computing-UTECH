@@ -32,7 +32,7 @@
                 <br /><br />
                 <asp:Label ID="Label3" runat="server" Text="Active Students on Selected Module:"></asp:Label>
                 <br />
-                <asp:DropDownList ID="DropDownList_students_doing_module" runat="server" AutoPostBack="true" OnSelectedIndexChanged="DropDownList_students_doing_module_SelectedIndexChanged"></asp:DropDownList>
+                <asp:DropDownList ID="DropDownList_students_doing_module" DataTextField="student" DataValueField="selection num" runat="server" AutoPostBack="true"></asp:DropDownList>
              </center>            
         </div>
     </form>
