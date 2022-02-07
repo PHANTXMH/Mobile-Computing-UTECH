@@ -1,4 +1,8 @@
-﻿.textbox {
+﻿body {    
+    font-family: 'Gill Sans MT';
+}
+
+.textbox {
     width: 296px;
     height: 39px;
     background-color: lightyellow;
@@ -13,16 +17,17 @@
 
 .droplist {
     font-size: medium;
-    font-family: 'Arial Narrow';
+    font-family: 'Gill Sans MT';
     height: 39px;
     width: 302px;
     background-color: #dcff93;
     border-color: steelblue;
+    border-radius: 10px;
 }
 
 .label {
     font-size: medium;
-    font-family: 'Arial Narrow';
+    font-family: 'Gill Sans MT';
     color: black;
 }
 
