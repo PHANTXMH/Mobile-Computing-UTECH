@@ -8,7 +8,16 @@
 </head>
 <body>
     <form id="formModules" runat="server">
-        <div>
+        <div id="divMain" class="div" runat="server">
+            <br />
+            <asp:Button ID="Button_Main_Student_Maintenance" runat="server" Text="Student Maintenance" class="button" OnClick="Button_Main_Student_Maintenance_Click"/>
+            <br />
+            <asp:Button ID="Button_Main_Module_Maintenance" runat="server" Text="Module Maintenance" class="button"/>
+            <br />
+            <asp:Button ID="Button_Main_Module_Info" runat="server" Text="Module Info" class="button" OnClick="Button_Main_Module_Info_Click"/>
+            <br />
+        </div>
+        <div id="divModuleInfo" runat="server">
             <center>
                 <asp:Label ID="Label1" runat="server" Text="Module Info">
                 <br /><br />
@@ -33,7 +42,40 @@
                 <asp:Label ID="Label3" runat="server" Text="Active Students on Selected Module:"></asp:Label>
                 <br />
                 <asp:DropDownList ID="DropDownList_students_doing_module" DataTextField="student" DataValueField="selection num" runat="server" AutoPostBack="true"></asp:DropDownList>
+                <br />
+                <br />
+                <br />
+                <asp:Button ID="Button_go_back1" runat="server" Text="Go Back" class="button" OnClick="Button_go_back1_Click"/>
              </center>            
+        </div>
+        <div id="divStudentMaint" runat="server">
+            <br />
+            <asp:Label ID="Label4" runat="server" Text="Student" CssClass="label"></asp:Label>
+            <br />
+            <asp:DropDownList ID="DropDownList_studentMaint_students" runat="server" CssClass="droplist" AutoPostBack="true" DataTextField="student" DataValueField="student num" OnSelectedIndexChanged="DropDownList_studentMaint_students_SelectedIndexChanged"></asp:DropDownList>
+            <br />
+            <asp:Button ID="Button_studentMaint_edit" runat="server" Text="Edit" OnClick="Button_studentMaint_edit_Click"  />
+            <br />
+            <br />
+            <asp:Label ID="Label5" runat="server" Text="First Name"></asp:Label>
+            <br />
+            <asp:TextBox ID="TextBox_studentMaint_firstname" runat="server" MaxLength="17" CssClass="textbox"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="Label7" runat="server" Text="Last Name" CssClass="label"></asp:Label>
+            <br />
+            <asp:TextBox ID="TextBox_studentMaint_lastname" runat="server" CssClass="label" MaxLength="17"></asp:TextBox>
+            <br />
+            <br />
+            <asp:Label ID="Label_studentMain_feedback" runat="server" Text="Label"></asp:Label>
+            <br />
+            <asp:Button ID="Button_studentMaint_new" runat="server" Text="New" OnClick="Button_studentMaint_new_Click" />
+            <br />
+            <asp:Button ID="Button_studentMaint_add" runat="server" Text="Add" OnClick="Button_studentMaint_add_Click" />
+            <br />
+            <asp:Button ID="Button_studentMaint_update" runat="server" Text="Update" OnClick="Button_studentMaint_update_Click" />
+            <br />
+            <asp:Button ID="Button_go_back1a" runat="server" Text="Go Back" OnClick="Button_go_back1a_Click" />
+            <br /><br />
         </div>
     </form>
 </body>
