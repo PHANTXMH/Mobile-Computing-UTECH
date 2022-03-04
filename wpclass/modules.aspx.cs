@@ -168,8 +168,10 @@ namespace wpclass
         void refreshStudentMaint_students()
         {
             formsOff();
-            DropDownList_studentMaint_students.DataSource = dbAccess.getAllStudents();
-            DropDownList_studentMaint_students.DataBind();
+            GridView_students.Columns[1].Visible = true;
+            GridView_students.DataSource = dbAccess.getAllStudents();
+            GridView_students.DataBind();
+            GridView_students.Columns[1].Visible = false;            
             showStudent();
         }        
 
@@ -183,7 +185,9 @@ namespace wpclass
 
         void showStudent()
         {
-            DataTable db = dbAccess.getStudent(int.Parse(DropDownList_studentMaint_students.SelectedValue));
+            formsOff();
+            if (TextBox_gridviewstudents_selected_num.Text == Empty()) return;
+            DataTable db = dbAccess.getStudent(int.Parse(TextBox_gridviewstudents_selected_num.Text));
 
             TextBox_studentMaint_firstname.Text = db.Rows[0]["first name"].ToString();
             TextBox_studentMaint_lastname.Text = db.Rows[0]["last name"].ToString();
@@ -210,6 +214,10 @@ namespace wpclass
         {
             formsOff();
             clearMessages();
+
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex;
+            TextBox_gridviewstudents_selected_num.Text = GridView_students.Rows[rw].Cells[2].Text;
+            showStudent();
 
             TextBox_studentMaint_firstname.Enabled =
                 TextBox_studentMaint_lastname.Enabled =
@@ -257,7 +265,7 @@ namespace wpclass
                 return;
             }            
 
-            dbAccess.updateStudent(int.Parse(DropDownList_studentMaint_students.SelectedValue),
+            dbAccess.updateStudent(int.Parse(TextBox_gridviewstudents_selected_num.Text),
                 TextBox_studentMaint_firstname.Text, TextBox_studentMaint_lastname.Text);
             refreshStudentMaint_students();
             Label_studentMain_feedback.Text = "<font color='blue'>Done...</font><br/>";
@@ -351,6 +359,17 @@ namespace wpclass
             populateModuleDetails();
         }
 
-        
+        protected void Button_students_select_Click(object sender, EventArgs e)
+        {
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;
+            TextBox_gridviewstudents_selected_num.Text = GridView_students.Rows[rw].Cells[1].Text;
+
+            //highlights the row just selected
+            for (i = 0; i < GridView_students.Rows.Count; i++)
+                GridView_students.Rows[i].BackColor = System.Drawing.Color.White;
+            GridView_students.Rows[rw].BackColor = System.Drawing.Color.LightGreen;
+
+            showStudent();
+        }
     }
 }

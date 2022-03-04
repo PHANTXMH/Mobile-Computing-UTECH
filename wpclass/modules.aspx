@@ -53,11 +53,20 @@
             <br />
             <asp:Label ID="Label4" runat="server" Text="Student" CssClass="label"></asp:Label>
             <br />
-            <asp:DropDownList ID="DropDownList_studentMaint_students" runat="server" CssClass="droplist" AutoPostBack="true" DataTextField="student" DataValueField="student num" OnSelectedIndexChanged="DropDownList_studentMaint_students_SelectedIndexChanged"></asp:DropDownList>
-            <br />
-            <asp:Button ID="Button_studentMaint_edit" runat="server" Text="Edit" OnClick="Button_studentMaint_edit_Click"  />
-            <br />
-            <br />
+            
+            <asp:GridView ID="GridView_students" runat="server" BorderStyle="None" AutoGenerateColumns="false">
+                <Columns>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="Button_students_select" runat="server" Text="Select" OnClick="Button_students_select_Click" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField ="student num" />
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="last name" HeaderText="Last Name" HeaderStyle-CssClass="labelstuff" />
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="first name" HeaderText="First Name" HeaderStyle-CssClass="labelstuff" />
+                </Columns>
+            </asp:GridView>
+            <asp:TextBox ID="TextBox_gridviewstudents_selected_num" Visible="false" runat="server"></asp:TextBox>
             <asp:Label ID="Label5" runat="server" Text="First Name"></asp:Label>
             <br />
             <asp:TextBox ID="TextBox_studentMaint_firstname" runat="server" MaxLength="17" CssClass="textbox"></asp:TextBox>

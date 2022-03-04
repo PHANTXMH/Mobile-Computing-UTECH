@@ -195,22 +195,22 @@ namespace wpclass
         protected global::System.Web.UI.WebControls.Label Label4;
 
         /// <summary>
-        /// DropDownList_studentMaint_students control.
+        /// GridView_students control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList_studentMaint_students;
+        protected global::System.Web.UI.WebControls.GridView GridView_students;
 
         /// <summary>
-        /// Button_studentMaint_edit control.
+        /// TextBox_gridviewstudents_selected_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button_studentMaint_edit;
+        protected global::System.Web.UI.WebControls.TextBox TextBox_gridviewstudents_selected_num;
 
         /// <summary>
         /// Label5 control.
