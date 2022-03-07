@@ -1,5 +1,9 @@
-﻿body {    
-    font-family: 'Gill Sans MT';
+﻿body {
+    background-image: url('https://mdbootstrap.com/img/new/standard/city/041.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Gill Sans MT';    
 }
 
 .textbox {
@@ -33,7 +37,15 @@
 
 .button {
     color: white;
-    background-color: palevioletred;
+    background-color: blueviolet;
+    height: 48px;
+    border-width: thin;
+    width: 302px;
+}
+
+#Button_back {
+    color: black;
+    background-color: red;
     height: 48px;
     border-width: thin;
     width: 302px;
