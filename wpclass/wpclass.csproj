@@ -68,8 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="halls.aspx" />
+    <Content Include="login.aspx" />
     <Content Include="modules.aspx" />
     <Content Include="prison.aspx" />
+    <Content Include="skoolers.aspx" />
     <Content Include="staffmembers.aspx" />
     <Content Include="Styles\StyleSheet1.css" />
     <Content Include="Web.config" />
@@ -83,6 +85,13 @@
       <DependentUpon>halls.aspx</DependentUpon>
     </Compile>
     <Compile Include="Layers\DataAccessModules.cs" />
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
     <Compile Include="modules.aspx.cs">
       <DependentUpon>modules.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -98,6 +107,13 @@
       <DependentUpon>prison.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="skoolers.aspx.cs">
+      <DependentUpon>skoolers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="skoolers.aspx.designer.cs">
+      <DependentUpon>skoolers.aspx</DependentUpon>
+    </Compile>
     <Compile Include="staffmembers.aspx.cs">
       <DependentUpon>staffmembers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

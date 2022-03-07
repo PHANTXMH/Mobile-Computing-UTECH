@@ -50,6 +50,27 @@ namespace wpclass
             return DataTable_DTable;
         }
 
+        public DataTable viewHighSchools(int schoolNum)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_view", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@schoolnum", SqlDbType.Int).Value = schoolNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
         public DataTable getModules(int int_student_num)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -256,7 +277,24 @@ namespace wpclass
             SQLDBCommand.Dispose();
             SQLConnection_DBcnn.Dispose();
         }
+        public void updateHighSchoolName(string schoolName, int schoolNum)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_name_update", SQLConnection_DBcnn);
 
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@schoolname", schoolName);
+            SQLDBCommand.Parameters.AddWithValue("@schoolnum", schoolNum);
+            
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
         public void addStudent(string string_first_name, string string_last_name)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -265,6 +303,24 @@ namespace wpclass
             SQLDBCommand.CommandType = CommandType.StoredProcedure;            
             SQLDBCommand.Parameters.AddWithValue("@first_name", string_first_name);
             SQLDBCommand.Parameters.AddWithValue("@last_name", string_last_name);
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public void addHighSchool(string highSchoolName, int studentNum)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_add_school", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@schoolname", highSchoolName);
+            SQLDBCommand.Parameters.AddWithValue("@studentnum", studentNum);
 
             SQLConnection_DBcnn.Open();
             SQLDBCommand.ExecuteNonQuery();
@@ -416,6 +472,110 @@ namespace wpclass
             SqlDataAdapter_SQLda.Dispose();
 
             return DataTable_DTable;
+        }
+
+        public DataTable getAllHighSchools()
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_skoolers_get_all", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getEligibleHeadStudents()
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_get_eligible_head_student", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getHighSchoolHeadStudent(int highSchoolNum)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_get_head_student", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@highSchoolNum", SqlDbType.Int).Value = highSchoolNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public bool checkUserLogin(string username, string password)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_check_user_login", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@username", username);
+            SQLDBCommand.Parameters.AddWithValue("@password", password);
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return int.Parse(DataTable_DTable.Rows[0]["row count"].ToString()) == 0? false: true;
+        }      
+        
+        public bool checkSchoolNameExits(string schoolName)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_high_school_name_exists", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@schoolname", schoolName);            
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return int.Parse(DataTable_DTable.Rows[0]["row count"].ToString()) == 0 ? false : true;
         }
 
         public String connectionString()
