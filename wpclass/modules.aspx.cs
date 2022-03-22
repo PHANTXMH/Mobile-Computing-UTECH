@@ -11,6 +11,8 @@ namespace wpclass
     public partial class modules : System.Web.UI.Page
     {
         DataAccessModules dbAccess = new DataAccessModules();
+        int selectedGrid = 0, selectedModuleGrid = 0;
+        string gridData;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,22 +40,24 @@ namespace wpclass
         }
 
         void startUp()
-        {
-            DropDownList_students.DataSource = dbAccess.getAllStudents();
-            DropDownList_students.DataBind();
-            refreshModules();
+        {            
+            //refreshModules();
+            GridView_student_info.DataSource = dbAccess.getAllStudents();
+            GridView_student_info.DataBind();
+            GridView_student_info.Columns[1].Visible = false;
+            //GridView_module_info.Columns[1].Visible = false;
 
             divsOff();
             divMain.Visible = true;
         }
 
         void refreshModules()
-        {
-            
-            DropDownList_modules.DataSource = dbAccess.getModules(int.Parse(DropDownList_students.SelectedValue));
-            DropDownList_modules.DataBind();            
+        {            
+            GridView_module_info.DataSource = dbAccess.getModules(selectedGrid);
+            GridView_module_info.DataBind();
+           
             showModuleInfo();
-            Label_selected_student.Text = DropDownList_students.SelectedItem.ToString();
+            Label_selected_student.Text = gridData;
         }
 
         protected void DropDownList_students_SelectedIndexChanged(object sender, EventArgs e)
@@ -68,24 +72,23 @@ namespace wpclass
                 Label_lecturer_email.Text = string.Empty;
 
             DropDownList_students_doing_module.Items.Clear();
-
-            if (DropDownList_modules.Items.Count == 0) return;
+                        
+            if (GridView_module_info.Rows.Count == 0) return;
 
             populateStudentsDoingSelectedModule();
 
-            DataTable db = dbAccess.getModule(int.Parse(DropDownList_modules.SelectedValue));
+            DataTable db = dbAccess.getModule(selectedGrid);
             
             if (db.Rows.Count == 0) return;
             Label_lecturer.Text = db.Rows[0]["lecturer"].ToString();
             Label_lecturer_email.Text = db.Rows[0]["email"].ToString();
             Label_faculty_college_owner.Text = db.Rows[0]["fc name"].ToString();
-
             
         }
 
         void populateStudentsDoingSelectedModule()
         {            
-            DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(int.Parse(DropDownList_modules.SelectedValue));
+            DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(selectedGrid);
             DropDownList_students_doing_module.DataBind();
         }
 
@@ -195,14 +198,14 @@ namespace wpclass
         
         void populateModuleDetails()
         {            
-            int modulenum = int.Parse(DropDownList_ModuleMaint_module.SelectedValue);
+            //int modulenum = int.Parse(DropDownList_ModuleMaint_module.SelectedValue);
             
-            DropDownList_ModuleMaint_lectuerername.DataSource = dbAccess.getModuleLecturer(modulenum);
-            DropDownList_ModuleMaint_facultyname.DataSource = dbAccess.getModuleFacultyName(modulenum);
+            DropDownList_ModuleMaint_lectuerername.DataSource = dbAccess.getModuleLecturer(selectedModuleGrid);
+            DropDownList_ModuleMaint_facultyname.DataSource = dbAccess.getModuleFacultyName(selectedModuleGrid);
 
             DropDownList_ModuleMaint_lectuerername.DataBind();
             DropDownList_ModuleMaint_facultyname.DataBind();
-            TextBox_moduleMaint_modulename.Text = dbAccess.getModuleModuleName(modulenum).Rows[0]["module code"].ToString();           
+            TextBox_moduleMaint_modulename.Text = dbAccess.getModuleModuleName(selectedModuleGrid).Rows[0]["module code"].ToString();           
         }
 
         protected void DropDownList_studentMaint_students_SelectedIndexChanged(object sender, EventArgs e)
@@ -371,5 +374,34 @@ namespace wpclass
 
             showStudent();
         }
+
+        protected void Button_student_select_Click(object sender, EventArgs e)
+        {
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;
+            selectedGrid = int.Parse(GridView_student_info.Rows[rw].Cells[1].Text);
+            gridData = GridView_student_info.Rows[rw].Cells[2].Text;
+
+            //highlights the row just selected
+            for (i = 0; i < GridView_student_info.Rows.Count; i++)
+                GridView_student_info.Rows[i].BackColor = System.Drawing.Color.White;
+            GridView_student_info.Rows[rw].BackColor = System.Drawing.Color.LightGreen;
+            //GridView_module_info.Columns[1].Visible = false;
+            refreshModules();
+        }        
+
+        protected void Button_modules_info_Click(object sender, EventArgs e)
+        {
+            //GridView_module_info.Columns[1].Visible = true;
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;            
+            selectedModuleGrid = int.Parse(GridView_module_info.Rows[rw].Cells[1].Text);            
+
+            //highlights the row just selected
+            for (i = 0; i < GridView_module_info.Rows.Count; i++)
+                GridView_module_info.Rows[i].BackColor = System.Drawing.Color.White;
+            GridView_module_info.Rows[rw].BackColor = System.Drawing.Color.LightGreen;
+            
+            populateModuleDetails();
+        }
+       
     }
 }

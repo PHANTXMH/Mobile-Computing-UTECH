@@ -78,22 +78,13 @@ namespace wpclass
         protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
-        /// Label2 control.
+        /// GridView_student_info control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
-
-        /// <summary>
-        /// DropDownList_students control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList_students;
+        protected global::System.Web.UI.WebControls.GridView GridView_student_info;
 
         /// <summary>
         /// Label_selected_student control.
@@ -105,13 +96,13 @@ namespace wpclass
         protected global::System.Web.UI.WebControls.Label Label_selected_student;
 
         /// <summary>
-        /// DropDownList_modules control.
+        /// GridView_module_info control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList_modules;
+        protected global::System.Web.UI.WebControls.GridView GridView_module_info;
 
         /// <summary>
         /// Label_lecturer control.

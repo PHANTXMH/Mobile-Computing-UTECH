@@ -18,18 +18,35 @@
             <asp:Button ID="Button_Main_Module_Info" runat="server" Text="Module Info" class="button" OnClick="Button_Main_Module_Info_Click"/>
             <br />
         </div>
-        <div id="divModuleInfo" runat="server">
-            
-                <asp:Label ID="Label1" runat="server" Text="Module Info">
-                <br /><br />
-                </asp:Label><asp:Label ID="Label2" runat="server" Text="Student"></asp:Label>
-                <br /><br />
-                <asp:DropDownList ID="DropDownList_students" DataTextField="student" DataValueField="student num" AutoPostBack="true" runat="server" OnSelectedIndexChanged="DropDownList_students_SelectedIndexChanged"></asp:DropDownList>
-                <br />
+        <div id="divModuleInfo" runat="server">            
+                <asp:Label ID="Label1" runat="server" Text="Module Info"></asp:Label>
+                <br /><br />                              
+                <asp:GridView ID="GridView_student_info" runat="server" BorderStyle="None" AutoGenerateColumns="false">       
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Button ID="Button_modules_select" runat="server" Text="Select" OnClick="Button_student_select_Click" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField ="student num" />
+                        <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="student" HeaderText="Student" HeaderStyle-CssClass="labelstuff" />                        
+                    </Columns>
+                </asp:GridView>
+                 <br />
                 <asp:Label ID="Label_selected_student" runat="server" Text="Label"></asp:Label>
-                <br /><br />
-                <asp:DropDownList ID="DropDownList_modules" DataTextField="module code" DataValueField="module num" AutoPostBack="true" runat="server" OnSelectedIndexChanged="DropDownList_modules_SelectedIndexChanged"></asp:DropDownList>
-                <br /><br />
+                <br /><br />                                    
+                <asp:GridView ID="GridView_module_info" runat="server" BorderStyle="None" AutoGenerateColumns="false">       
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Button ID="Button_modules_info" runat="server" Text="Select" OnClick="Button_modules_info_Click" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField ="module num" />
+                        <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="module code" HeaderText="Module" HeaderStyle-CssClass="labelstuff" />                        
+                    </Columns>
+                </asp:GridView>
+                 <br />
                 <asp:Label  runat="server" Text="Lecturer"></asp:Label>
                 <br />
                 <asp:Label ID="Label_lecturer" runat="server" Text="Label" ForeColor="Brown"></asp:Label>
