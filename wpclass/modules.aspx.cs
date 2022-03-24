@@ -11,11 +11,13 @@ namespace wpclass
     public partial class modules : System.Web.UI.Page
     {
         DataAccessModules dbAccess = new DataAccessModules();
-        int selectedGrid = 0, selectedModuleGrid = 0;
-        string gridData;
+        int selectedGrid, selectedGridNum;
+        string gridData;        
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Session["selectedGrid"] = 0;
+
             if (!IsPostBack)
             {
                 startUp();
@@ -24,7 +26,7 @@ namespace wpclass
 
         void divsOff()
         {
-            divMain.Visible = divStudentMaint.Visible = divModuleInfo.Visible = divModuleMaint.Visible = false;
+            divMain.Visible = divStudentMaint.Visible = divModuleInfo.Visible = divModuleMaint.Visible = divLecturerMaint.Visible = false;
 
         }
 
@@ -45,18 +47,31 @@ namespace wpclass
             GridView_student_info.DataSource = dbAccess.getAllStudents();
             GridView_student_info.DataBind();
             GridView_student_info.Columns[1].Visible = false;
-            //GridView_module_info.Columns[1].Visible = false;
+
+            GridView_lecturer.DataSource = dbAccess.getAllLecturerDetails();
+            GridView_lecturer.DataBind();
+            //GridView_lecturer.Columns[1].Visible = false;
 
             divsOff();
             divMain.Visible = true;
+
+            Label_faculty_college_owner.Text =
+                Label_lecturer.Text =
+                Label_lecturer_email.Text = string.Empty;
+            DropDownList_students_doing_module.Items.Clear();
+            Button_lecturer_confirm_update.Visible = false;
         }
 
         void refreshModules()
         {            
             GridView_module_info.DataSource = dbAccess.getModules(selectedGrid);
             GridView_module_info.DataBind();
-           
-            showModuleInfo();
+
+            Label_faculty_college_owner.Text =
+                Label_lecturer.Text =
+                Label_lecturer_email.Text = string.Empty;
+            DropDownList_students_doing_module.Items.Clear();
+
             Label_selected_student.Text = gridData;
         }
 
@@ -70,14 +85,13 @@ namespace wpclass
             Label_faculty_college_owner.Text =
                 Label_lecturer.Text =
                 Label_lecturer_email.Text = string.Empty;
-
             DropDownList_students_doing_module.Items.Clear();
                         
             if (GridView_module_info.Rows.Count == 0) return;
 
             populateStudentsDoingSelectedModule();
 
-            DataTable db = dbAccess.getModule(selectedGrid);
+            DataTable db = dbAccess.getModule(selectedGridNum);
             
             if (db.Rows.Count == 0) return;
             Label_lecturer.Text = db.Rows[0]["lecturer"].ToString();
@@ -88,7 +102,7 @@ namespace wpclass
 
         void populateStudentsDoingSelectedModule()
         {            
-            DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(selectedGrid);
+            DropDownList_students_doing_module.DataSource = dbAccess.getAllStudentsByModule(selectedGridNum);
             DropDownList_students_doing_module.DataBind();
         }
 
@@ -124,6 +138,12 @@ namespace wpclass
             clearMessages();
             refreshModuleMaint_modules();
             populateModuleDetails();
+        }
+
+        protected void Button_Main_Lecturer_Maintenance_Click(object sender, EventArgs e)
+        {
+            divsOff();
+            divLecturerMaint.Visible = true;
         }
 
         void BackToMain()
@@ -192,20 +212,40 @@ namespace wpclass
             if (TextBox_gridviewstudents_selected_num.Text == Empty()) return;
             DataTable db = dbAccess.getStudent(int.Parse(TextBox_gridviewstudents_selected_num.Text));
 
-            TextBox_studentMaint_firstname.Text = db.Rows[0]["first name"].ToString();
-            TextBox_studentMaint_lastname.Text = db.Rows[0]["last name"].ToString();
+            TextBox_studentMaint_firstname.Text = db.Rows[0]["first name"].ToString().Trim();
+            TextBox_studentMaint_lastname.Text = db.Rows[0]["last name"].ToString().Trim();
+
+            TextBox_studentMaint_firstname.Enabled = true;
+            TextBox_studentMaint_lastname.Enabled = true;
+            TextBox_studentMaint_firstname.BackColor = System.Drawing.Color.White;
+            TextBox_studentMaint_lastname.BackColor = System.Drawing.Color.White;
+
+            Button_studentMaint_update.Enabled = true;
+            Button_studentMaint_update.BackColor = System.Drawing.Color.PaleVioletRed;
         }
         
         void populateModuleDetails()
         {            
-            //int modulenum = int.Parse(DropDownList_ModuleMaint_module.SelectedValue);
+            int modulenum = int.Parse(DropDownList_ModuleMaint_module.SelectedValue);
             
-            DropDownList_ModuleMaint_lectuerername.DataSource = dbAccess.getModuleLecturer(selectedModuleGrid);
-            DropDownList_ModuleMaint_facultyname.DataSource = dbAccess.getModuleFacultyName(selectedModuleGrid);
-
+            DropDownList_ModuleMaint_lectuerername.DataSource = dbAccess.getModuleLecturer(modulenum);
+            DropDownList_ModuleMaint_facultyname.DataSource = dbAccess.getModuleFacultyName(modulenum);
+            
             DropDownList_ModuleMaint_lectuerername.DataBind();
             DropDownList_ModuleMaint_facultyname.DataBind();
-            TextBox_moduleMaint_modulename.Text = dbAccess.getModuleModuleName(selectedModuleGrid).Rows[0]["module code"].ToString();           
+            TextBox_moduleMaint_modulename.Text = dbAccess.getModuleModuleName(modulenum).Rows[0]["module code"].ToString();           
+        }
+
+        bool inputDataEmpty()
+        {
+            if((TextBox_lecturer_firstname.Text == "" ) || (TextBox_lecturer_lastname.Text == "") || (TextBox_lecturer_email.Text == ""))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         protected void DropDownList_studentMaint_students_SelectedIndexChanged(object sender, EventArgs e)
@@ -271,7 +311,13 @@ namespace wpclass
             dbAccess.updateStudent(int.Parse(TextBox_gridviewstudents_selected_num.Text),
                 TextBox_studentMaint_firstname.Text, TextBox_studentMaint_lastname.Text);
             refreshStudentMaint_students();
-            Label_studentMain_feedback.Text = "<font color='blue'>Done...</font><br/>";
+            Label_studentMain_feedback.Text = "<font color='blue'>UPDATED</font><br/>";
+
+            Button_studentMaint_update.BackColor = Button_go_back1a.BackColor;
+            Button_studentMaint_update.Enabled = false;
+
+            TextBox_studentMaint_firstname.Text = "";
+            TextBox_studentMaint_lastname.Text = "";
         }
 
         protected void Button_moduleMaint_update_Click(object sender, EventArgs e)
@@ -390,18 +436,92 @@ namespace wpclass
         }        
 
         protected void Button_modules_info_Click(object sender, EventArgs e)
-        {
-            //GridView_module_info.Columns[1].Visible = true;
-            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;            
-            selectedModuleGrid = int.Parse(GridView_module_info.Rows[rw].Cells[1].Text);            
+        {            
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;
+            selectedGridNum = int.Parse(GridView_module_info.Rows[rw].Cells[1].Text);            
 
             //highlights the row just selected
             for (i = 0; i < GridView_module_info.Rows.Count; i++)
                 GridView_module_info.Rows[i].BackColor = System.Drawing.Color.White;
             GridView_module_info.Rows[rw].BackColor = System.Drawing.Color.LightGreen;
-            
-            populateModuleDetails();
+
+            //populateModuleDetails();
+            showModuleInfo(); 
+        }        
+
+        protected void Button_lecturer_edit_Click(object sender, EventArgs e)
+        {
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;            
+            Session["editLecturer"] = int.Parse(GridView_lecturer.Rows[rw].Cells[1].Text);            
+
+            //highlights the row just selected
+            for (i = 0; i < GridView_lecturer.Rows.Count; i++)
+                GridView_lecturer.Rows[i].BackColor = System.Drawing.Color.White;
+            GridView_lecturer.Rows[rw].BackColor = System.Drawing.Color.LightGreen;
+
+            TextBox_lecturer_firstname.Text = GridView_lecturer.Rows[rw].Cells[3].Text;
+            TextBox_lecturer_lastname.Text = GridView_lecturer.Rows[rw].Cells[2].Text;
+            TextBox_lecturer_email.Text = GridView_lecturer.Rows[rw].Cells[4].Text;
+
+            Button_lecturer_add.Visible = false;
+            Button_lecturer_confirm_update.BackColor = System.Drawing.Color.Indigo;
+            Button_lecturer_confirm_update.ForeColor = System.Drawing.Color.White;
+
+            Button_lecturer_confirm_update.Visible = true;            
         }
-       
+
+        protected void Button_lecturer_add_Click(object sender, EventArgs e)
+        {
+            if (inputDataEmpty())
+            {
+                Label_lecturer_status.Text = "Please enter all required information!";
+                Label_lecturer_status.ForeColor = System.Drawing.Color.Red;
+                Label_lecturer_status.Visible = true;
+                return;
+            }
+            if(!dbAccess.addLecturer(TextBox_lecturer_firstname.Text.Trim(), TextBox_lecturer_lastname.Text.Trim(), TextBox_lecturer_email.Text.Trim()))
+            {
+                Label_lecturer_status.Text = "ADDED";
+                Label_lecturer_status.ForeColor = System.Drawing.Color.Blue;
+                Label_lecturer_status.Visible = true;
+            }
+            else
+            {
+                Label_lecturer_status.Text = "An error occured adding a lecturer, please try again!";
+                Label_lecturer_status.ForeColor = System.Drawing.Color.Red;
+                Label_lecturer_status.Visible = true;
+            }
+            TextBox_lecturer_firstname.Text =
+            TextBox_lecturer_lastname.Text =
+            TextBox_lecturer_email.Text = Empty();
+
+            GridView_lecturer.DataSource = dbAccess.getAllLecturerDetails();
+            GridView_lecturer.DataBind();           
+        }        
+
+        protected void Button_lecturer_confirm_update_Click(object sender, EventArgs e)
+        {
+            if(!dbAccess.updateLecturer((int)Session["editLecturer"], TextBox_lecturer_firstname.Text.Trim(), TextBox_lecturer_lastname.Text.Trim(), TextBox_lecturer_email.Text.Trim())){            
+                Label_lecturer_status.Text = "UPDATED";
+                Label_lecturer_status.ForeColor = System.Drawing.Color.Blue;
+                Label_lecturer_status.Visible = true;
+                GridView_lecturer.DataSource = dbAccess.getAllLecturerDetails();
+                GridView_lecturer.DataBind();
+            }
+            else
+            {
+                Label_lecturer_status.Text = "An error occured adding a lecturer, please try again!";
+                Label_lecturer_status.ForeColor = System.Drawing.Color.Red;
+                Label_lecturer_status.Visible = true;
+            }
+
+            Button_lecturer_add.Visible = true;
+
+            TextBox_lecturer_firstname.Text =  
+                TextBox_lecturer_lastname.Text = 
+                TextBox_lecturer_email.Text = Empty();
+
+            Button_lecturer_confirm_update.Visible = false;
+        }
     }
 }

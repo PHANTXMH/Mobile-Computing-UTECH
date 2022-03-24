@@ -295,6 +295,36 @@ namespace wpclass
             SQLDBCommand.Dispose();
             SQLConnection_DBcnn.Dispose();
         }
+
+        public bool updateLecturer(int lecturerNum, string firstName, string lastName, string email)
+        {
+            int success = 0;
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("MC_lecturer_update", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@lecturerNum", lecturerNum);
+            SQLDBCommand.Parameters.AddWithValue("@firstName", firstName);
+            SQLDBCommand.Parameters.AddWithValue("@lastName", lastName);
+            SQLDBCommand.Parameters.AddWithValue("@email", email);
+
+            SQLConnection_DBcnn.Open();
+            success = SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+
+            if(success > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public void addStudent(string string_first_name, string string_last_name)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -348,6 +378,35 @@ namespace wpclass
 
             SQLDBCommand.Dispose();
             SQLConnection_DBcnn.Dispose();
+        }
+
+        public bool addLecturer(string firstName, string lastName, string email)
+        {
+            int success = 0;
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("MC_lecturer_add", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@first_name", firstName);
+            SQLDBCommand.Parameters.AddWithValue("@last_name", lastName);
+            SQLDBCommand.Parameters.AddWithValue("@email", email);
+
+            SQLConnection_DBcnn.Open();
+            success = SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+
+            if (success > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public DataTable getDetails(int moduleNum)
@@ -445,6 +504,26 @@ namespace wpclass
             SQLConnection_DBcnn.Open();
             SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
             SQLDBCommand.CommandType = CommandType.StoredProcedure;            
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getAllLecturerDetails()
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("MC_modules_get_lecturer_details", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter_SQLda.Fill(DataTable_DTable);
 
             //Garbage collection
