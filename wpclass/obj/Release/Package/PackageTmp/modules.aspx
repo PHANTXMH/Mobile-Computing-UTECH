@@ -15,21 +15,40 @@
             <br />
             <asp:Button ID="Button_Main_Module_Maintenance" runat="server" Text="Module Maintenance" class="button" OnClick="Button_Main_Module_Maintenance_Click"/>
             <br />
+            <asp:Button ID="Button_Main_Lecturer_Maintenance" runat="server" Text="Lecturer Maintenance" class="button" OnClick="Button_Main_Lecturer_Maintenance_Click"/>
+            <br />
             <asp:Button ID="Button_Main_Module_Info" runat="server" Text="Module Info" class="button" OnClick="Button_Main_Module_Info_Click"/>
             <br />
         </div>
-        <div id="divModuleInfo" runat="server">
-            
-                <asp:Label ID="Label1" runat="server" Text="Module Info">
-                <br /><br />
-                </asp:Label><asp:Label ID="Label2" runat="server" Text="Student"></asp:Label>
-                <br /><br />
-                <asp:DropDownList ID="DropDownList_students" DataTextField="student" DataValueField="student num" AutoPostBack="true" runat="server" OnSelectedIndexChanged="DropDownList_students_SelectedIndexChanged"></asp:DropDownList>
-                <br />
+        <div id="divModuleInfo" runat="server">            
+                <asp:Label ID="Label1" runat="server" Text="Module Info"></asp:Label>
+                <br /><br />                              
+                <asp:GridView ID="GridView_student_info" runat="server" BorderStyle="None" AutoGenerateColumns="false">       
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Button ID="Button_modules_select" runat="server" Text="Select" OnClick="Button_student_select_Click" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField ="student num" />
+                        <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="student" HeaderText="Student" HeaderStyle-CssClass="labelstuff" />                        
+                    </Columns>
+                </asp:GridView>
+                 <br />
                 <asp:Label ID="Label_selected_student" runat="server" Text="Label"></asp:Label>
-                <br /><br />
-                <asp:DropDownList ID="DropDownList_modules" DataTextField="module code" DataValueField="module num" AutoPostBack="true" runat="server" OnSelectedIndexChanged="DropDownList_modules_SelectedIndexChanged"></asp:DropDownList>
-                <br /><br />
+                <br /><br />                                    
+                <asp:GridView ID="GridView_module_info" runat="server" BorderStyle="None" AutoGenerateColumns="false">       
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Button ID="Button_modules_info" runat="server" Text="Select" OnClick="Button_modules_info_Click" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField ="module num" />
+                        <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="module code" HeaderText="Module" HeaderStyle-CssClass="labelstuff" />                        
+                    </Columns>
+                </asp:GridView>
+                 <br />
                 <asp:Label  runat="server" Text="Lecturer"></asp:Label>
                 <br />
                 <asp:Label ID="Label_lecturer" runat="server" Text="Label" ForeColor="Brown"></asp:Label>
@@ -46,14 +65,12 @@
                 <br />
                 <br />
                 <br />
-                <asp:Button ID="Button_go_back1" runat="server" Text="Go Back" class="button" OnClick="Button_go_back1_Click"/>
-                         
+                <asp:Button ID="Button_go_back1" runat="server" Text="Go Back" class="button" OnClick="Button_go_back1_Click"/>                         
         </div>
         <div id="divStudentMaint" runat="server">
             <br />
             <asp:Label ID="Label4" runat="server" Text="Student" CssClass="label"></asp:Label>
-            <br />
-            
+            <br />            
             <asp:GridView ID="GridView_students" runat="server" BorderStyle="None" AutoGenerateColumns="false">
                 <Columns>
                     <asp:TemplateField>
@@ -117,6 +134,44 @@
             <br />
             <asp:Button ID="Button_go_back2a" runat="server" Text="Go Back" OnClick="Button_go_back1a_Click"/>
         </div>
+            <div id="divLecturerMaint" runat="server">
+                <br />
+                <asp:Label ID="Label2" runat="server" Text="Lecturer"></asp:Label>
+                <br />                
+                <asp:GridView ID="GridView_lecturer" runat="server" BorderStyle="None" AutoGenerateColumns="false">
+                <Columns>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="Button_lecturer_edit" runat="server" Text="Edit" OnClick="Button_lecturer_edit_Click" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField ="lecturer num" HeaderText="ID" HeaderStyle-CssClass="labelstuff"/>
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="last name" HeaderText="Last Name" HeaderStyle-CssClass="labelstuff" />
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="first name" HeaderText="First Name" HeaderStyle-CssClass="labelstuff" />
+                    <asp:BoundField ItemStyle-CssClass="labelstuff" DataField="email" HeaderText="Email" HeaderStyle-CssClass="labelstuff" />                    
+                </Columns>
+            </asp:GridView>
+            <br /><br />
+            <asp:Label runat="server" Text="First Name"></asp:Label>
+            <br />
+            <asp:TextBox ID="TextBox_lecturer_firstname" runat="server"></asp:TextBox>
+            <br /><br />
+            <asp:Label runat="server" Text="Last Name"></asp:Label>
+            <br />
+            <asp:TextBox ID="TextBox_lecturer_lastname" runat="server"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="Label12" runat="server" Text="Email"></asp:Label>
+            <br />
+            <asp:TextBox ID="TextBox_lecturer_email" runat="server"></asp:TextBox>
+            <br /><br />
+            <asp:Button ID="Button_lecturer_add" runat="server" Text="Add New" OnClick="Button_lecturer_add_Click" />
+            <br /><br />
+            <asp:Button ID="Button_lecturer_confirm_update" runat="server" Text="Update" OnClick="Button_lecturer_confirm_update_Click" />
+            <br /><br />
+            <asp:Label ID="Label_lecturer_status" runat="server" Text="Label" ForeColor="blue" Visible="false"></asp:Label>
+            <br /><br />
+            <asp:Button ID="Button_lecturer_goback" runat="server" Text="Go Back" OnClick="Button_go_back1a_Click"/>
+            </div>
         </center>
     </form>
 </body>

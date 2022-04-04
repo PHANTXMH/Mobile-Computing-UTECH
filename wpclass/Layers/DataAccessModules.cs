@@ -50,6 +50,46 @@ namespace wpclass
             return DataTable_DTable;
         }
 
+        public DataTable getAllChampsEvent()    //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_events_get_all", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getAllChampsHighSchools()
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_highschools_get_all", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
         public DataTable viewHighSchools(int schoolNum)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -62,6 +102,70 @@ namespace wpclass
             SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
             SQLDBCommand.CommandType = CommandType.StoredProcedure;
             SQLDBCommand.Parameters.Add("@schoolnum", SqlDbType.Int).Value = schoolNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getOccupiedLanes(int eventNum)     //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_occupied_lanes", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@eventNum", SqlDbType.Int).Value = eventNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getEventStartList(int eventNum)    //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_get_event_start_list", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@eventNum", SqlDbType.Int).Value = eventNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getElegibleAthletes(int hsNum, int eventNum)
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_events_get_all_eligible_athletes", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@eventNum", SqlDbType.Int).Value = eventNum;
+            SQLDBCommand.Parameters.Add("@hsNum", SqlDbType.Int).Value = hsNum;
             SqlDataAdapter_SQLda.Fill(DataTable_DTable);
 
             //Garbage collection
@@ -151,6 +255,26 @@ namespace wpclass
             SQLConnection_DBcnn.Close();
             SqlDataAdapter_SQLda.Dispose();
 
+
+            return DataTable_DTable;
+        }
+
+        public DataTable getAllAthletes()   //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_athlete_get_all", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
 
             return DataTable_DTable;
         }
@@ -325,6 +449,54 @@ namespace wpclass
                 return false;
             }
         }
+
+        public void updateAthlete(string fname, string lname, int athleteNum)   //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_athlete_update", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;            
+            SQLDBCommand.Parameters.AddWithValue("@firstName", fname);
+            SQLDBCommand.Parameters.AddWithValue("@lastName", lname);
+            SQLDBCommand.Parameters.AddWithValue("@athleteNum", athleteNum);
+            
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public bool lanesOccupied(int eventNum, int laneNum)    //LT3
+        {
+            int success = 0;
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_occupied_lanes", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@laneNum", laneNum);
+            SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);            
+
+            SQLConnection_DBcnn.Open();
+            success = SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+
+            if (success > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void addStudent(string string_first_name, string string_last_name)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -333,6 +505,46 @@ namespace wpclass
             SQLDBCommand.CommandType = CommandType.StoredProcedure;            
             SQLDBCommand.Parameters.AddWithValue("@first_name", string_first_name);
             SQLDBCommand.Parameters.AddWithValue("@last_name", string_last_name);
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public void addAthlete(string firstname, string lastname, int hsNum, string isMale, int age)    //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_athlete_add", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@firstName", firstname);
+            SQLDBCommand.Parameters.AddWithValue("@lastName", lastname);
+            SQLDBCommand.Parameters.AddWithValue("@hsNum", hsNum);
+            SQLDBCommand.Parameters.AddWithValue("@isMale", isMale);
+            SQLDBCommand.Parameters.AddWithValue("@age", age);
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public void assignLane(int eventNum, int athleteNum, int laneNum)   //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_assign_lane", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);
+            SQLDBCommand.Parameters.AddWithValue("@athleteNum", athleteNum);
+            SQLDBCommand.Parameters.AddWithValue("@laneNum", laneNum);
 
             SQLConnection_DBcnn.Open();
             SQLDBCommand.ExecuteNonQuery();

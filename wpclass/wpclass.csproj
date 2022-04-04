@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="easternchamps.aspx" />
     <Content Include="halls.aspx" />
     <Content Include="login.aspx" />
     <Content Include="modules.aspx" />
@@ -77,6 +78,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="easternchamps.aspx.cs">
+      <DependentUpon>easternchamps.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="easternchamps.aspx.designer.cs">
+      <DependentUpon>easternchamps.aspx</DependentUpon>
+    </Compile>
     <Compile Include="halls.aspx.cs">
       <DependentUpon>halls.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
