@@ -53,8 +53,18 @@ namespace wpclass
         }
 
         protected void Button_remove_Click(object sender, EventArgs e)
-        {
+        {            
+            int rw = ((GridViewRow)(sender as Control).NamingContainer).RowIndex, i;
 
+            dbAccess.clearStartListSingle(int.Parse(GridView_startinglist.Rows[rw].Cells[1].Text));
+
+            Label_event_status.Text = "DONE";
+            Label_event_status.ForeColor = System.Drawing.Color.Green;
+
+            GridView_startinglist.Columns[1].Visible = true;
+            GridView_startinglist.DataSource = dbAccess.getEventStartList(int.Parse(DropDownList_event.SelectedValue));
+            GridView_startinglist.DataBind();
+            GridView_startinglist.Columns[1].Visible = false;
         }
 
         protected void Button_maintenance_menu_Click(object sender, EventArgs e)
@@ -147,6 +157,9 @@ namespace wpclass
             CheckBox_gender.Enabled = false;
 
             TextBox_firstname.Text = TextBox_lastname.Text = "";
+
+            Button_add.Enabled = false;
+            Button_add.ForeColor = Button_athlete_edit.ForeColor;
         }
 
         protected void Button_athlete_edit_Click(object sender, EventArgs e)
@@ -181,14 +194,19 @@ namespace wpclass
 
         protected void DropDownList_event_SelectedIndexChanged(object sender, EventArgs e)
         {
+            GridView_startinglist.Columns[1].Visible = true;
             GridView_startinglist.DataSource = dbAccess.getEventStartList(int.Parse(DropDownList_event.SelectedValue));
-            GridView_startinglist.DataBind();
-            GridView_startinglist.Columns[1].Visible = false;
+            GridView_startinglist.DataBind();            
 
             DropDownList_elegible_athlete.DataSource = dbAccess.getElegibleAthletes(int.Parse(DropDownList_highschools.SelectedValue),
                 int.Parse(DropDownList_event.SelectedValue));
 
             DropDownList_elegible_athlete.DataBind();
+
+            Label_event_status.Text = "-";
+            Label_event_status.ForeColor = System.Drawing.Color.Black;
+
+            GridView_startinglist.Columns[1].Visible = false;               //Hides id column for grid view
         }
 
         protected void DropDownList_highschools_SelectedIndexChanged(object sender, EventArgs e)
@@ -200,17 +218,20 @@ namespace wpclass
 
         protected void Button_event_new_Click(object sender, EventArgs e)
         {
-            DropDownList_highschools.Enabled = true;
-            DropDownList_elegible_athlete.Enabled = true;
+            DropDownList_highschools.Enabled = 
+            DropDownList_elegible_athlete.Enabled =
             DropDownList_lanenumber.Enabled = true;
+
+            Label_event_status.Text = "-";
+            Label_event_status.ForeColor = System.Drawing.Color.Black;
         }
 
         protected void Button_event_add_Click(object sender, EventArgs e)
         {
-            if (dbAccess.lanesOccupied(int.Parse(DropDownList_event.SelectedValue), int.Parse(DropDownList_lanenumber.SelectedValue)))
+            if (!dbAccess.lanesOccupied(int.Parse(DropDownList_event.SelectedValue), int.Parse(DropDownList_lanenumber.SelectedValue)))
             {
                 dbAccess.assignLane(int.Parse(DropDownList_event.SelectedValue), int.Parse(DropDownList_elegible_athlete.SelectedValue),
-               int.Parse(DropDownList_lanenumber.SelectedValue));
+                int.Parse(DropDownList_lanenumber.SelectedValue));
 
                 GridView_startinglist.DataSource = dbAccess.getEventStartList(int.Parse(DropDownList_event.SelectedValue));
                 GridView_startinglist.DataBind();
@@ -225,7 +246,7 @@ namespace wpclass
             else
             {
                 Label_event_status.Text = "This lane is already occupied!";
-                Label_event_status.ForeColor = System.Drawing.Color.Red;
+                Label_event_status.ForeColor = System.Drawing.Color.Red;                
             }            
         }        
 
@@ -260,6 +281,21 @@ namespace wpclass
         }
 
         protected void Button_event_empty_Click(object sender, EventArgs e)
+        {
+            dbAccess.clearStartList(int.Parse(DropDownList_event.SelectedValue));
+            Label_event_status.Text = "DONE";
+            Label_event_status.ForeColor = System.Drawing.Color.Green;
+
+            GridView_startinglist.DataSource = dbAccess.getEventStartList(int.Parse(DropDownList_event.SelectedValue));
+            GridView_startinglist.DataBind();
+        }
+
+        protected void GridView_startinglist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void DropDownList_elegible_athlete_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

@@ -492,29 +492,27 @@ namespace wpclass
 
         public bool lanesOccupied(int eventNum, int laneNum)    //LT3
         {
-            int success;
+            //int success;
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
             SqlCommand SQLDBCommand = new SqlCommand("LT3_occupied_lanes", SQLConnection_DBcnn);
-            SQLDBCommand.CommandType = CommandType.StoredProcedure;
-            SQLDBCommand.Parameters.AddWithValue("@laneNum", laneNum);
-            SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);            
+            DataTable_DTable = new DataTable("type");
 
             SQLConnection_DBcnn.Open();
-            success = SQLDBCommand.ExecuteNonQuery();   //always returning -1
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@laneNum", laneNum);
+            SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);
+
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);           
 
             SQLConnection_DBcnn.Close();
 
             SQLDBCommand.Dispose();
             SQLConnection_DBcnn.Dispose();
 
-            if (success > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return int.Parse(DataTable_DTable.Rows[0]["row count"].ToString()) == 0 ? false : true;
         }
 
         public void addStudent(string string_first_name, string string_last_name)
@@ -525,6 +523,40 @@ namespace wpclass
             SQLDBCommand.CommandType = CommandType.StoredProcedure;            
             SQLDBCommand.Parameters.AddWithValue("@first_name", string_first_name);
             SQLDBCommand.Parameters.AddWithValue("@last_name", string_last_name);
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public void clearStartList(int eventNum)        //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_clear_starting_list", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);            
+
+            SQLConnection_DBcnn.Open();
+            SQLDBCommand.ExecuteNonQuery();
+
+            SQLConnection_DBcnn.Close();
+
+            SQLDBCommand.Dispose();
+            SQLConnection_DBcnn.Dispose();
+        }
+
+        public void clearStartListSingle(int assignNum)     //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_clear_starting_list_single", SQLConnection_DBcnn);
+
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.AddWithValue("@assignNum", assignNum);
 
             SQLConnection_DBcnn.Open();
             SQLDBCommand.ExecuteNonQuery();

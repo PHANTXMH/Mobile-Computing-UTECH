@@ -80,7 +80,7 @@
                 <asp:DropDownList ID="DropDownList_event" runat="server" DataTextField="eventsummary" DataValueField="event num" AutoPostBack="true" OnSelectedIndexChanged="DropDownList_event_SelectedIndexChanged"></asp:DropDownList>
                 <br />
                 <br />                
-                <asp:GridView ID="GridView_startinglist" runat="server" BorderStyle="None" AutoGenerateColumns="false">       
+                <asp:GridView ID="GridView_startinglist" runat="server" BorderStyle="None" AutoGenerateColumns="false" OnSelectedIndexChanged="GridView_startinglist_SelectedIndexChanged">       
                     <Columns>
                         <asp:TemplateField>
                             <ItemTemplate>
@@ -100,7 +100,7 @@
                 <br /><br />
                 <asp:Label ID="Label11" runat="server" Text="Athlete"></asp:Label>
                 <br />
-                <asp:DropDownList ID="DropDownList_elegible_athlete" runat="server" DataValueField="athlete num" DataTextField="athlete" AutoPostBack="true"></asp:DropDownList>
+                <asp:DropDownList ID="DropDownList_elegible_athlete" runat="server" DataValueField="athlete num" DataTextField="athlete" AutoPostBack="true" OnSelectedIndexChanged="DropDownList_elegible_athlete_SelectedIndexChanged"></asp:DropDownList>
                 <br />
                 <br />
                 <asp:Label ID="Label12" runat="server" Text="Lane Number"></asp:Label>
