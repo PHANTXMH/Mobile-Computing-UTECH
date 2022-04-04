@@ -92,11 +92,13 @@ namespace wpclass
             DropDownList_highschool_athlete .DataSource = dbAccess.getAllChampsHighSchools();
             DropDownList_highschool_athlete.DataBind();
 
-            TextBox_firstname.Enabled = false;
-            TextBox_lastname.Enabled = false;
-            CheckBox_gender.Enabled = false;
-            DropDownList_age.Enabled = false;
-            DropDownList_highschool_athlete.Enabled = false;            
+            TextBox_firstname.Enabled =
+            TextBox_lastname.Enabled =
+            CheckBox_gender.Enabled =
+            DropDownList_age.Enabled =
+            DropDownList_highschool_athlete.Enabled =
+            Button_add.Enabled =
+            Button_update.Enabled = false;
 
             TextBox_firstname.Text = db.Rows[int.Parse(DropDownList_athlete.SelectedValue) - 1]["first name"].ToString();
             TextBox_lastname.Text = db.Rows[int.Parse(DropDownList_athlete.SelectedValue) - 1]["last name"].ToString();
@@ -114,6 +116,17 @@ namespace wpclass
             CheckBox_gender.Enabled = true;
             DropDownList_highschool_athlete.Enabled = true;
             DropDownList_age.Enabled = true;
+
+            TextBox_firstname.Text = TextBox_lastname.Text = "";
+
+            Label_athlete_status.Text = "-";
+            Label_athlete_status.ForeColor = System.Drawing.Color.Black;
+
+            Button_add.Enabled = true;
+            Button_add.ForeColor = System.Drawing.Color.PaleVioletRed;
+
+            Button_update.Enabled = false;
+            Button_update.ForeColor = Button_athlete_edit.ForeColor;
         }
 
         protected void Button_add_Click(object sender, EventArgs e)
@@ -125,13 +138,29 @@ namespace wpclass
             DropDownList_athlete.DataBind();
 
             Label_athlete_status.Text = "DONE";
-            Label_athlete_status.ForeColor = System.Drawing.Color.Green;            
+            Label_athlete_status.ForeColor = System.Drawing.Color.Green;
+
+            DropDownList_highschool_athlete.Enabled =
+            DropDownList_age.Enabled =
+            TextBox_firstname.Enabled =
+            TextBox_lastname.Enabled =
+            CheckBox_gender.Enabled = false;
+
+            TextBox_firstname.Text = TextBox_lastname.Text = "";
         }
 
         protected void Button_athlete_edit_Click(object sender, EventArgs e)
         {
             TextBox_firstname.Enabled = true;
-            TextBox_lastname.Enabled = true;                   
+            TextBox_lastname.Enabled = true;
+
+            Label_athlete_status.Text = "-";
+            Label_athlete_status.ForeColor = System.Drawing.Color.Black;
+
+            Button_add.Enabled = false;
+            Button_update.Enabled = true;
+            Button_add.ForeColor = Button_athlete_edit.ForeColor;
+            Button_update.ForeColor = System.Drawing.Color.PaleVioletRed;
         }
 
         protected void Button_update_Click(object sender, EventArgs e)
@@ -143,6 +172,11 @@ namespace wpclass
 
             Label_athlete_status.Text = "DONE";
             Label_athlete_status.ForeColor = System.Drawing.Color.Green;
+
+            TextBox_firstname.Text = TextBox_lastname.Text = "";
+
+            Button_update.Enabled = false;
+            Button_update.ForeColor = Button_athlete_edit.ForeColor;
         }
 
         protected void DropDownList_event_SelectedIndexChanged(object sender, EventArgs e)
@@ -153,6 +187,7 @@ namespace wpclass
 
             DropDownList_elegible_athlete.DataSource = dbAccess.getElegibleAthletes(int.Parse(DropDownList_highschools.SelectedValue),
                 int.Parse(DropDownList_event.SelectedValue));
+
             DropDownList_elegible_athlete.DataBind();
         }
 
@@ -196,14 +231,19 @@ namespace wpclass
 
         protected void DropDownList_athlete_SelectedIndexChanged(object sender, EventArgs e)
         {            
-            DataTable db = dbAccess.getAllAthletes();
+            DataTable db = dbAccess.getAthleteDetails(int.Parse(DropDownList_athlete.SelectedValue));
+            
+            TextBox_firstname.Text =  db.Rows[0]["first name"].ToString();
+            TextBox_lastname.Text = db.Rows[0]["last name"].ToString();
+            string male = db.Rows[0]["is male"].ToString();
 
-            TextBox_firstname.Text =  db.Rows[int.Parse(DropDownList_athlete.SelectedValue)-1]["first name"].ToString();
-            TextBox_lastname.Text = db.Rows[int.Parse(DropDownList_athlete.SelectedValue)-1]["last name"].ToString();
-
-            if(db.Rows[int.Parse(DropDownList_athlete.SelectedValue)-1]["is male"].ToString() == "1") 
+            if(Boolean.Parse(male)) 
             {
                 CheckBox_gender.Checked = true;
+            }
+            else
+            {
+                CheckBox_gender.Checked = false;
             }
         }
 
@@ -217,6 +257,11 @@ namespace wpclass
         {
             divsOff();
             divMenu.Visible = true;
-        }        
+        }
+
+        protected void Button_event_empty_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

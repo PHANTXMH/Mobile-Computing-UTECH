@@ -113,7 +113,7 @@
                 <br /><br />
                 <asp:Label ID="Label_event_status" runat="server" Text="-"></asp:Label>
                 <br /><br />
-                <asp:Button ID="Button_event_empty" runat="server" Text="Empty Start List" />
+                <asp:Button ID="Button_event_empty" runat="server" Text="Empty Start List" OnClick="Button_event_empty_Click" />
                 <br />
                 <br />
                 <asp:Button ID="Button_goback1" runat="server" Text="Go Back" OnClick="Button_goback1_Click" />

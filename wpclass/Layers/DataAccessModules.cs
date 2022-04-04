@@ -363,6 +363,27 @@ namespace wpclass
             return DataTable_DTable;
         }
 
+        public DataTable getAthleteDetails(int athleteNum)    //LT3
+        {
+            SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
+            DataTable DataTable_DTable;
+            SqlDataAdapter SqlDataAdapter_SQLda = new SqlDataAdapter();
+            SqlCommand SQLDBCommand = new SqlCommand("LT3_athlete_get_details", SQLConnection_DBcnn);
+            DataTable_DTable = new DataTable("type");
+
+            SQLConnection_DBcnn.Open();
+            SqlDataAdapter_SQLda.SelectCommand = SQLDBCommand;
+            SQLDBCommand.CommandType = CommandType.StoredProcedure;
+            SQLDBCommand.Parameters.Add("@athleteNum", SqlDbType.Int).Value = athleteNum;
+            SqlDataAdapter_SQLda.Fill(DataTable_DTable);
+
+            //Garbage collection
+            SQLConnection_DBcnn.Close();
+            SqlDataAdapter_SQLda.Dispose();
+
+            return DataTable_DTable;
+        }
+
         public void updateStudent(int int_stud_num, string string_first_name, string string_last_name)
         {
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
@@ -471,16 +492,15 @@ namespace wpclass
 
         public bool lanesOccupied(int eventNum, int laneNum)    //LT3
         {
-            int success = 0;
+            int success;
             SqlConnection SQLConnection_DBcnn = new SqlConnection(connectionString());
             SqlCommand SQLDBCommand = new SqlCommand("LT3_occupied_lanes", SQLConnection_DBcnn);
-
             SQLDBCommand.CommandType = CommandType.StoredProcedure;
             SQLDBCommand.Parameters.AddWithValue("@laneNum", laneNum);
             SQLDBCommand.Parameters.AddWithValue("@eventNum", eventNum);            
 
             SQLConnection_DBcnn.Open();
-            success = SQLDBCommand.ExecuteNonQuery();
+            success = SQLDBCommand.ExecuteNonQuery();   //always returning -1
 
             SQLConnection_DBcnn.Close();
 
