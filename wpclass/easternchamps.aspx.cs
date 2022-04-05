@@ -132,15 +132,19 @@ namespace wpclass
             Label_athlete_status.Text = "-";
             Label_athlete_status.ForeColor = System.Drawing.Color.Black;
 
-            Button_add.Enabled = true;
-            Button_add.ForeColor = System.Drawing.Color.PaleVioletRed;
+            Button_add.Enabled = true;            
 
-            Button_update.Enabled = false;
-            Button_update.ForeColor = Button_athlete_edit.ForeColor;
+            Button_update.Enabled = false;            
         }
 
         protected void Button_add_Click(object sender, EventArgs e)
         {            
+            if(TextBox_firstname.Text == "" && TextBox_lastname.Text == "")
+            {
+                Label_athlete_status.Text = "Name fields are empty!";
+                Label_athlete_status.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
             dbAccess.addAthlete(TextBox_firstname.Text.Trim(), TextBox_lastname.Text.Trim(), int.Parse(DropDownList_highschool_athlete.SelectedValue),
                 CheckBox_gender.Checked.ToString(), int.Parse(DropDownList_age.SelectedValue));
 
@@ -158,8 +162,7 @@ namespace wpclass
 
             TextBox_firstname.Text = TextBox_lastname.Text = "";
 
-            Button_add.Enabled = false;
-            Button_add.ForeColor = Button_athlete_edit.ForeColor;
+            Button_add.Enabled = false;            
         }
 
         protected void Button_athlete_edit_Click(object sender, EventArgs e)
@@ -171,9 +174,7 @@ namespace wpclass
             Label_athlete_status.ForeColor = System.Drawing.Color.Black;
 
             Button_add.Enabled = false;
-            Button_update.Enabled = true;
-            Button_add.ForeColor = Button_athlete_edit.ForeColor;
-            Button_update.ForeColor = System.Drawing.Color.PaleVioletRed;
+            Button_update.Enabled = true;            
         }
 
         protected void Button_update_Click(object sender, EventArgs e)
@@ -188,8 +189,7 @@ namespace wpclass
 
             TextBox_firstname.Text = TextBox_lastname.Text = "";
 
-            Button_update.Enabled = false;
-            Button_update.ForeColor = Button_athlete_edit.ForeColor;
+            Button_update.Enabled = false;            
         }
 
         protected void DropDownList_event_SelectedIndexChanged(object sender, EventArgs e)
