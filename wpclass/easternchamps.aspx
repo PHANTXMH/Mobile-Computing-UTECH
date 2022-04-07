@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>MCLAB3-1703882</title>  
+    <link href="Styles/StyleSheet1.css" rel="stylesheet" type="text/css" />
     <meta name="viewport" content="width=device-width, intial-scale=1.0" />
 </head>
 <body>
@@ -42,12 +43,12 @@
                 <br />
                 <asp:Label ID="Label4" runat="server" Text="First Name"></asp:Label>
                 <br />
-                <asp:TextBox ID="TextBox_firstname" runat="server"></asp:TextBox>
+                <asp:TextBox ID="TextBox_firstname" CssClass="textbox" runat="server"></asp:TextBox>
                 <br />
                 <br />
                 <asp:Label ID="Label5" runat="server" Text="Last Name"></asp:Label>
                 <br />
-                <asp:TextBox ID="TextBox_lastname" runat="server"></asp:TextBox>
+                <asp:TextBox CssClass="textbox" ID="TextBox_lastname" runat="server"></asp:TextBox>
                 <br />
                 <br />
                 <asp:CheckBox ID="CheckBox_gender" runat="server" />                

@@ -87,6 +87,7 @@ namespace wpclass
             DropDownList_highschools.Enabled = false;
             DropDownList_elegible_athlete.Enabled = false;
             DropDownList_lanenumber.Enabled = false;
+            Button_event_add.Enabled = false;
         }
 
         protected void Button_maintenance_athlete_Click(object sender, EventArgs e)
@@ -218,6 +219,7 @@ namespace wpclass
 
         protected void Button_event_new_Click(object sender, EventArgs e)
         {
+            Button_event_add.Enabled = true;
             DropDownList_highschools.Enabled = 
             DropDownList_elegible_athlete.Enabled =
             DropDownList_lanenumber.Enabled = true;
@@ -242,6 +244,7 @@ namespace wpclass
 
                 Label_event_status.Text = "DONE";
                 Label_event_status.ForeColor = System.Drawing.Color.Green;
+                Button_event_add.Enabled = false;
             }
             else
             {
